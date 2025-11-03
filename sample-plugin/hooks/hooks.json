@@ -1,0 +1,187 @@
+{
+  "version": "1.0.0",
+  "hooks": [
+    {
+      "name": "pre-commit",
+      "description": "Run before committing code",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "format-code",
+          "script": "scripts/format-code.py",
+          "args": ["--check"],
+          "blocking": true,
+          "timeout": 30
+        },
+        {
+          "name": "lint-check",
+          "command": "eslint",
+          "args": [".", "--fix"],
+          "blocking": false,
+          "timeout": 60
+        }
+      ],
+      "conditions": {
+        "files": ["*.js", "*.ts", "*.py"],
+        "branches": ["main", "develop", "feature/*"]
+      }
+    },
+    {
+      "name": "pre-push",
+      "description": "Run before pushing to remote",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "security-scan",
+          "script": "scripts/security-scan.sh",
+          "blocking": true,
+          "timeout": 120
+        },
+        {
+          "name": "test-runner",
+          "command": "npm",
+          "args": ["test"],
+          "blocking": true,
+          "timeout": 300
+        }
+      ],
+      "conditions": {
+        "branches": ["main", "develop"],
+        "require_all_pass": true
+      }
+    },
+    {
+      "name": "post-merge",
+      "description": "Run after merging branches",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "dependency-update",
+          "command": "npm",
+          "args": ["install"],
+          "blocking": false,
+          "timeout": 180
+        },
+        {
+          "name": "database-migrate",
+          "command": "npm",
+          "args": ["run", "migrate"],
+          "blocking": false,
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "pre-deploy",
+      "description": "Run before deployment",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "build-validation",
+          "command": "npm",
+          "args": ["run", "build"],
+          "blocking": true,
+          "timeout": 300
+        },
+        {
+          "name": "deploy-script",
+          "script": "scripts/deploy.js",
+          "args": ["--validate"],
+          "blocking": true,
+          "timeout": 60
+        }
+      ],
+      "conditions": {
+        "environments": ["staging", "production"],
+        "require_approval": true,
+        "approvers": ["devops-team", "tech-lead"]
+      }
+    },
+    {
+      "name": "post-deploy",
+      "description": "Run after successful deployment",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "smoke-tests",
+          "command": "npm",
+          "args": ["run", "test:smoke"],
+          "blocking": false,
+          "timeout": 180
+        },
+        {
+          "name": "notify-team",
+          "script": "scripts/notify.sh",
+          "args": ["--channel", "deployments"],
+          "blocking": false,
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "on-save",
+      "description": "Run when files are saved",
+      "enabled": false,
+      "scripts": [
+        {
+          "name": "auto-format",
+          "script": "scripts/format-code.py",
+          "args": ["--fix"],
+          "blocking": false,
+          "timeout": 10
+        }
+      ],
+      "conditions": {
+        "files": ["*.js", "*.ts", "*.jsx", "*.tsx"],
+        "throttle": 1000
+      }
+    },
+    {
+      "name": "on-pr-create",
+      "description": "Run when pull request is created",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "pr-validation",
+          "command": "@security-check",
+          "blocking": true,
+          "timeout": 180
+        },
+        {
+          "name": "code-review",
+          "command": "@code-review",
+          "blocking": false,
+          "timeout": 120
+        }
+      ],
+      "conditions": {
+        "target_branches": ["main", "develop"],
+        "require_description": true,
+        "min_description_length": 50
+      }
+    }
+  ],
+  "global": {
+    "enabled": true,
+    "log_level": "info",
+    "log_file": "hooks.log",
+    "parallel_execution": true,
+    "max_parallel": 3,
+    "fail_fast": false,
+    "retry": {
+      "enabled": true,
+      "max_attempts": 3,
+      "delay": 1000
+    },
+    "notifications": {
+      "on_failure": true,
+      "on_success": false,
+      "channels": ["slack", "email"]
+    }
+  },
+  "environment": {
+    "NODE_ENV": "development",
+    "CI": "true",
+    "FORCE_COLOR": "1"
+  }
+}

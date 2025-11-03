@@ -1,0 +1,261 @@
+{
+  "version": "1.0.0",
+  "description": "Security-focused hooks for enhanced protection",
+  "hooks": [
+    {
+      "name": "security-pre-commit",
+      "description": "Security checks before commit",
+      "enabled": true,
+      "priority": 1,
+      "scripts": [
+        {
+          "name": "secret-scanning",
+          "description": "Scan for hardcoded secrets and credentials",
+          "command": "gitleaks",
+          "args": ["detect", "--source", ".", "--verbose"],
+          "blocking": true,
+          "timeout": 60,
+          "on_failure": "abort"
+        },
+        {
+          "name": "sensitive-data-check",
+          "description": "Check for PII and sensitive data",
+          "script": "scripts/check-sensitive-data.py",
+          "blocking": true,
+          "timeout": 30
+        },
+        {
+          "name": "dependency-vulnerability-scan",
+          "description": "Scan dependencies for known vulnerabilities",
+          "command": "npm",
+          "args": ["audit", "--audit-level=moderate"],
+          "blocking": false,
+          "timeout": 120
+        }
+      ],
+      "conditions": {
+        "files": ["*"],
+        "exclude": ["*.md", "*.txt", "*.log"],
+        "max_file_size": "10MB"
+      }
+    },
+    {
+      "name": "security-pre-push",
+      "description": "Advanced security validation before push",
+      "enabled": true,
+      "priority": 1,
+      "scripts": [
+        {
+          "name": "sast-scan",
+          "description": "Static Application Security Testing",
+          "command": "semgrep",
+          "args": ["--config=auto", "--json", "--output=sast-report.json"],
+          "blocking": true,
+          "timeout": 300
+        },
+        {
+          "name": "container-scan",
+          "description": "Scan container images for vulnerabilities",
+          "command": "trivy",
+          "args": ["image", "--severity", "HIGH,CRITICAL"],
+          "blocking": true,
+          "timeout": 180,
+          "conditions": {
+            "files": ["Dockerfile", "docker-compose.yml"]
+          }
+        },
+        {
+          "name": "iac-security-scan",
+          "description": "Infrastructure as Code security scanning",
+          "command": "checkov",
+          "args": ["-d", ".", "--framework", "terraform,cloudformation,kubernetes"],
+          "blocking": false,
+          "timeout": 240,
+          "conditions": {
+            "files": ["*.tf", "*.yaml", "*.yml", "*.json"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "security-pre-deploy",
+      "description": "Security gates before deployment",
+      "enabled": true,
+      "priority": 1,
+      "scripts": [
+        {
+          "name": "penetration-test",
+          "description": "Run automated penetration tests",
+          "script": "scripts/pen-test.sh",
+          "args": ["--target", "${DEPLOY_URL}"],
+          "blocking": true,
+          "timeout": 600,
+          "conditions": {
+            "environments": ["staging", "production"]
+          }
+        },
+        {
+          "name": "compliance-check",
+          "description": "Verify compliance requirements",
+          "command": "@compliance-check",
+          "args": ["--frameworks", "OWASP,PCI-DSS,GDPR"],
+          "blocking": true,
+          "timeout": 300
+        },
+        {
+          "name": "security-headers-check",
+          "description": "Validate security headers configuration",
+          "script": "scripts/check-headers.py",
+          "args": ["--strict"],
+          "blocking": true,
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "security-post-deploy",
+      "description": "Post-deployment security verification",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "runtime-protection",
+          "description": "Enable runtime application self-protection",
+          "script": "scripts/enable-rasp.sh",
+          "blocking": false,
+          "timeout": 120
+        },
+        {
+          "name": "security-monitoring",
+          "description": "Configure security monitoring and alerting",
+          "script": "scripts/setup-monitoring.sh",
+          "blocking": false,
+          "timeout": 180
+        },
+        {
+          "name": "vulnerability-disclosure",
+          "description": "Update vulnerability disclosure info",
+          "script": "scripts/update-security-txt.sh",
+          "blocking": false,
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "security-on-pr",
+      "description": "Security review for pull requests",
+      "enabled": true,
+      "scripts": [
+        {
+          "name": "code-security-review",
+          "description": "Automated security code review",
+          "command": "@security-reviewer",
+          "blocking": false,
+          "timeout": 300,
+          "output": "pr-comments"
+        },
+        {
+          "name": "threat-modeling",
+          "description": "Analyze threats introduced by changes",
+          "script": "scripts/threat-model.py",
+          "args": ["--diff", "${PR_DIFF}"],
+          "blocking": false,
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "incident-response",
+      "description": "Triggered during security incidents",
+      "enabled": true,
+      "manual_trigger": true,
+      "scripts": [
+        {
+          "name": "isolate-affected-systems",
+          "description": "Isolate compromised systems",
+          "script": "scripts/incident/isolate.sh",
+          "blocking": true,
+          "timeout": 60
+        },
+        {
+          "name": "collect-forensics",
+          "description": "Gather forensic data",
+          "script": "scripts/incident/collect-forensics.sh",
+          "blocking": false,
+          "timeout": 300
+        },
+        {
+          "name": "notify-stakeholders",
+          "description": "Send incident notifications",
+          "script": "scripts/incident/notify.sh",
+          "args": ["--severity", "${INCIDENT_SEVERITY}"],
+          "blocking": false,
+          "timeout": 30
+        }
+      ]
+    }
+  ],
+  "security_policies": {
+    "min_password_length": 12,
+    "require_mfa": true,
+    "session_timeout": 900,
+    "max_login_attempts": 5,
+    "api_rate_limit": 1000,
+    "encryption": {
+      "algorithm": "AES-256-GCM",
+      "key_rotation": 90,
+      "tls_version": "1.3"
+    },
+    "secrets": {
+      "storage": "vault",
+      "rotation": 30,
+      "detection_patterns": [
+        "api[_-]?key",
+        "secret[_-]?key",
+        "password",
+        "token",
+        "private[_-]?key",
+        "aws_access_key_id",
+        "aws_secret_access_key"
+      ]
+    }
+  },
+  "severity_thresholds": {
+    "critical": {
+      "action": "block",
+      "notify": ["security-team", "cto"],
+      "auto_remediate": true
+    },
+    "high": {
+      "action": "warn",
+      "notify": ["security-team"],
+      "require_approval": true
+    },
+    "medium": {
+      "action": "log",
+      "notify": ["dev-team"],
+      "require_approval": false
+    },
+    "low": {
+      "action": "log",
+      "notify": [],
+      "require_approval": false
+    }
+  },
+  "integrations": {
+    "siem": {
+      "enabled": true,
+      "endpoint": "https://siem.company.com/api",
+      "events": ["all"]
+    },
+    "vulnerability_management": {
+      "enabled": true,
+      "platform": "qualys",
+      "auto_scan": true
+    },
+    "threat_intelligence": {
+      "enabled": true,
+      "feeds": ["mitre-attack", "cve", "nvd"],
+      "update_frequency": "daily"
+    }
+  }
+}

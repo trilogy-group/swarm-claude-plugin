@@ -1,0 +1,114 @@
+{
+  "version": "1.0.0",
+  "type": "plugin-repository",
+  "name": "swarm-claude-plugin",
+  "description": "Claude Plugin Development Repository with DevOps Assistant Sample Plugin",
+  "author": "DevOps Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/swarm-claude-plugin"
+  },
+  "plugins": [
+    {
+      "name": "devops-assistant",
+      "path": "sample-plugin",
+      "version": "1.0.0",
+      "description": "Comprehensive DevOps automation plugin for Claude with CI/CD, monitoring, security, and compliance features",
+      "default": true,
+      "stable": true,
+      "tags": ["devops", "automation", "security", "monitoring", "ci-cd"]
+    }
+  ],
+  "discovery": {
+    "method": "manifest",
+    "auto_detect": true,
+    "search_paths": [
+      "sample-plugin",
+      "plugins/*",
+      "packages/*"
+    ],
+    "ignore_paths": [
+      "node_modules",
+      "dist",
+      "build",
+      ".git"
+    ]
+  },
+  "installation": {
+    "methods": [
+      {
+        "type": "claude-cli",
+        "description": "Install via Claude CLI",
+        "command": "claude plugin install {{repo_url}}",
+        "auto_path": true
+      },
+      {
+        "type": "script",
+        "description": "Install via script",
+        "command": "curl -sSL {{repo_url}}/raw/main/sample-plugin/install.sh | bash",
+        "requires_shell": true
+      },
+      {
+        "type": "git-clone",
+        "description": "Clone and install manually",
+        "commands": [
+          "git clone {{repo_url}}",
+          "cd swarm-claude-plugin",
+          "claude plugin install ./sample-plugin"
+        ]
+      },
+      {
+        "type": "direct-path",
+        "description": "Install with explicit path",
+        "command": "claude plugin install {{repo_url}}#path=sample-plugin"
+      }
+    ],
+    "requirements": {
+      "claude": ">=1.0.0",
+      "node": ">=16.0.0",
+      "python": ">=3.8",
+      "bash": ">=4.0"
+    },
+    "post_install": {
+      "message": "DevOps Assistant Plugin installed successfully! Run 'claude run @devops status' to test.",
+      "commands": [
+        "claude plugin verify devops-assistant",
+        "claude plugin test devops-assistant"
+      ]
+    }
+  },
+  "development": {
+    "watch_paths": [
+      "sample-plugin/**/*.md",
+      "sample-plugin/**/*.json",
+      "sample-plugin/**/*.js",
+      "sample-plugin/**/*.py",
+      "sample-plugin/**/*.sh"
+    ],
+    "test_command": "npm test && python -m pytest",
+    "lint_command": "npm run lint && pylint sample-plugin",
+    "build_required": false
+  },
+  "documentation": {
+    "readme": "sample-plugin/README.md",
+    "quick_start": "sample-plugin/QUICK_START.md",
+    "api_docs": "sample-plugin/docs/api.md",
+    "examples": "examples/",
+    "changelog": "sample-plugin/CHANGELOG.md"
+  },
+  "support": {
+    "issues": "https://github.com/example/swarm-claude-plugin/issues",
+    "discussions": "https://github.com/example/swarm-claude-plugin/discussions",
+    "documentation": "https://docs.example.com/claude-plugins/devops-assistant",
+    "email": "support@example.com"
+  },
+  "metadata": {
+    "created_at": "2024-01-15",
+    "updated_at": "2024-01-15",
+    "downloads": 0,
+    "stars": 0,
+    "verified": false,
+    "featured": false
+  }
+}

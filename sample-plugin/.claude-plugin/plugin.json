@@ -1,0 +1,65 @@
+{
+  "name": "devops-assistant",
+  "version": "1.0.0",
+  "description": "A comprehensive DevOps assistant plugin for Claude providing CI/CD, monitoring, security scanning, and infrastructure management capabilities",
+  "author": "DevOps Team",
+  "license": "MIT",
+  "repository": "https://github.com/example/devops-assistant-plugin",
+  "keywords": ["devops", "ci/cd", "monitoring", "security", "infrastructure"],
+  "claude": {
+    "minVersion": "1.0.0",
+    "maxVersion": "2.0.0"
+  },
+  "commands": {
+    "directory": "commands",
+    "prefix": "devops"
+  },
+  "agents": {
+    "directory": "agents",
+    "autoLoad": true
+  },
+  "skills": {
+    "directory": "skills",
+    "registry": [
+      {
+        "name": "code-reviewer",
+        "path": "code-reviewer",
+        "description": "Advanced code review with security and best practices analysis"
+      },
+      {
+        "name": "pdf-processor",
+        "path": "pdf-processor",
+        "description": "Process and analyze PDF documentation and reports"
+      }
+    ]
+  },
+  "hooks": {
+    "enabled": true,
+    "configFiles": [
+      "hooks/hooks.json",
+      "hooks/security-hooks.json"
+    ]
+  },
+  "mcp": {
+    "enabled": true,
+    "configFile": ".mcp.json"
+  },
+  "dependencies": {
+    "python": ">=3.8",
+    "node": ">=16.0.0",
+    "bash": ">=4.0"
+  },
+  "permissions": [
+    "file:read",
+    "file:write",
+    "process:execute",
+    "network:http",
+    "system:env"
+  ],
+  "config": {
+    "defaultBranch": "main",
+    "scanOnSave": true,
+    "autoFormat": false,
+    "securityLevel": "standard"
+  }
+}

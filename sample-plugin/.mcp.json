@@ -1,0 +1,407 @@
+{
+  "version": "1.0.0",
+  "description": "MCP (Model Context Protocol) server definitions for DevOps Assistant Plugin",
+  "servers": [
+    {
+      "name": "kubernetes-server",
+      "description": "Kubernetes cluster management and operations",
+      "endpoint": "http://localhost:8001",
+      "type": "rest",
+      "authentication": {
+        "type": "bearer",
+        "token_env": "K8S_TOKEN"
+      },
+      "capabilities": [
+        "cluster_info",
+        "pod_management",
+        "deployment_operations",
+        "service_discovery",
+        "config_maps",
+        "secrets_management"
+      ],
+      "operations": {
+        "get_pods": {
+          "method": "GET",
+          "path": "/api/v1/pods",
+          "description": "List all pods in cluster"
+        },
+        "create_deployment": {
+          "method": "POST",
+          "path": "/apis/apps/v1/namespaces/{namespace}/deployments",
+          "description": "Create a new deployment"
+        },
+        "scale_deployment": {
+          "method": "PATCH",
+          "path": "/apis/apps/v1/namespaces/{namespace}/deployments/{name}/scale",
+          "description": "Scale deployment replicas"
+        },
+        "get_logs": {
+          "method": "GET",
+          "path": "/api/v1/namespaces/{namespace}/pods/{name}/log",
+          "description": "Get pod logs"
+        }
+      }
+    },
+    {
+      "name": "docker-server",
+      "description": "Docker container and image management",
+      "endpoint": "unix:///var/run/docker.sock",
+      "type": "socket",
+      "capabilities": [
+        "container_management",
+        "image_operations",
+        "network_management",
+        "volume_management",
+        "system_info"
+      ],
+      "operations": {
+        "list_containers": {
+          "command": "docker ps -a --format json",
+          "description": "List all containers"
+        },
+        "build_image": {
+          "command": "docker build -t {tag} {path}",
+          "description": "Build Docker image"
+        },
+        "run_container": {
+          "command": "docker run {options} {image}",
+          "description": "Run a container"
+        },
+        "inspect": {
+          "command": "docker inspect {id}",
+          "description": "Inspect container or image"
+        }
+      }
+    },
+    {
+      "name": "git-server",
+      "description": "Git repository operations and version control",
+      "endpoint": "local",
+      "type": "cli",
+      "capabilities": [
+        "repository_management",
+        "branch_operations",
+        "commit_history",
+        "merge_operations",
+        "tag_management"
+      ],
+      "operations": {
+        "status": {
+          "command": "git status --porcelain=v2",
+          "description": "Get repository status"
+        },
+        "log": {
+          "command": "git log --format=json -n {limit}",
+          "description": "Get commit history"
+        },
+        "diff": {
+          "command": "git diff {ref1} {ref2}",
+          "description": "Show differences between refs"
+        },
+        "branch": {
+          "command": "git branch {options}",
+          "description": "Manage branches"
+        }
+      }
+    },
+    {
+      "name": "monitoring-server",
+      "description": "Metrics and monitoring data provider",
+      "endpoint": "http://localhost:9090",
+      "type": "prometheus",
+      "authentication": {
+        "type": "basic",
+        "username_env": "PROMETHEUS_USER",
+        "password_env": "PROMETHEUS_PASS"
+      },
+      "capabilities": [
+        "metrics_query",
+        "alerting",
+        "dashboard_data",
+        "time_series",
+        "aggregation"
+      ],
+      "queries": {
+        "cpu_usage": "rate(node_cpu_seconds_total[5m])",
+        "memory_usage": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+        "http_requests": "rate(http_requests_total[5m])",
+        "error_rate": "rate(http_requests_total{status=~'5..'}[5m])",
+        "response_time": "histogram_quantile(0.95, http_request_duration_seconds_bucket)"
+      }
+    },
+    {
+      "name": "database-server",
+      "description": "Database operations and management",
+      "endpoint": "postgresql://localhost:5432",
+      "type": "sql",
+      "authentication": {
+        "type": "connection_string",
+        "env": "DATABASE_URL"
+      },
+      "capabilities": [
+        "query_execution",
+        "schema_management",
+        "backup_restore",
+        "performance_analysis",
+        "replication_status"
+      ],
+      "operations": {
+        "query": {
+          "type": "sql",
+          "description": "Execute SQL query"
+        },
+        "backup": {
+          "command": "pg_dump {database} > {output}",
+          "description": "Backup database"
+        },
+        "analyze": {
+          "command": "EXPLAIN ANALYZE {query}",
+          "description": "Analyze query performance"
+        }
+      }
+    },
+    {
+      "name": "ci-cd-server",
+      "description": "CI/CD pipeline management",
+      "endpoint": "http://jenkins.local:8080",
+      "type": "jenkins",
+      "authentication": {
+        "type": "api_key",
+        "key_env": "JENKINS_API_KEY"
+      },
+      "capabilities": [
+        "job_management",
+        "pipeline_execution",
+        "build_artifacts",
+        "test_results",
+        "deployment_triggers"
+      ],
+      "operations": {
+        "trigger_build": {
+          "method": "POST",
+          "path": "/job/{job}/build",
+          "description": "Trigger a build"
+        },
+        "get_build_status": {
+          "method": "GET",
+          "path": "/job/{job}/{build}/api/json",
+          "description": "Get build status"
+        },
+        "get_test_results": {
+          "method": "GET",
+          "path": "/job/{job}/{build}/testReport/api/json",
+          "description": "Get test results"
+        }
+      }
+    },
+    {
+      "name": "cloud-provider",
+      "description": "Cloud infrastructure management (AWS/Azure/GCP)",
+      "endpoint": "dynamic",
+      "type": "cloud",
+      "provider": "aws",
+      "authentication": {
+        "type": "iam_role",
+        "profile": "default"
+      },
+      "capabilities": [
+        "resource_management",
+        "cost_analysis",
+        "security_groups",
+        "load_balancing",
+        "auto_scaling"
+      ],
+      "operations": {
+        "list_instances": {
+          "service": "ec2",
+          "action": "describe_instances",
+          "description": "List EC2 instances"
+        },
+        "create_instance": {
+          "service": "ec2",
+          "action": "run_instances",
+          "description": "Launch new instance"
+        },
+        "manage_security_group": {
+          "service": "ec2",
+          "action": "authorize_security_group_ingress",
+          "description": "Update security group rules"
+        }
+      }
+    },
+    {
+      "name": "logging-server",
+      "description": "Centralized logging and log analysis",
+      "endpoint": "http://elasticsearch:9200",
+      "type": "elasticsearch",
+      "authentication": {
+        "type": "basic",
+        "username_env": "ELASTIC_USER",
+        "password_env": "ELASTIC_PASS"
+      },
+      "capabilities": [
+        "log_search",
+        "aggregation",
+        "pattern_analysis",
+        "anomaly_detection",
+        "alerting"
+      ],
+      "indices": [
+        "application-logs-*",
+        "system-logs-*",
+        "security-logs-*",
+        "audit-logs-*"
+      ],
+      "queries": {
+        "error_logs": {
+          "index": "application-logs-*",
+          "query": {
+            "match": {
+              "level": "ERROR"
+            }
+          }
+        },
+        "security_events": {
+          "index": "security-logs-*",
+          "query": {
+            "range": {
+              "timestamp": {
+                "gte": "now-1h"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "secret-manager",
+      "description": "Secrets and credentials management",
+      "endpoint": "http://vault:8200",
+      "type": "vault",
+      "authentication": {
+        "type": "token",
+        "token_env": "VAULT_TOKEN"
+      },
+      "capabilities": [
+        "secret_storage",
+        "secret_rotation",
+        "encryption",
+        "pki_management",
+        "audit_logging"
+      ],
+      "operations": {
+        "read_secret": {
+          "method": "GET",
+          "path": "/v1/secret/data/{path}",
+          "description": "Read secret value"
+        },
+        "write_secret": {
+          "method": "POST",
+          "path": "/v1/secret/data/{path}",
+          "description": "Store secret value"
+        },
+        "rotate_secret": {
+          "method": "POST",
+          "path": "/v1/sys/rotate",
+          "description": "Rotate encryption keys"
+        }
+      }
+    },
+    {
+      "name": "notification-server",
+      "description": "Notification and alerting service",
+      "endpoint": "various",
+      "type": "multi",
+      "channels": {
+        "slack": {
+          "webhook_env": "SLACK_WEBHOOK",
+          "enabled": true
+        },
+        "email": {
+          "smtp_server": "smtp.company.com",
+          "port": 587,
+          "username_env": "SMTP_USER",
+          "password_env": "SMTP_PASS"
+        },
+        "pagerduty": {
+          "api_key_env": "PAGERDUTY_KEY",
+          "enabled": true
+        }
+      },
+      "capabilities": [
+        "send_notifications",
+        "escalation",
+        "scheduling",
+        "acknowledgment",
+        "reporting"
+      ]
+    }
+  ],
+  "server_groups": {
+    "infrastructure": ["kubernetes-server", "docker-server", "cloud-provider"],
+    "monitoring": ["monitoring-server", "logging-server"],
+    "development": ["git-server", "ci-cd-server"],
+    "security": ["secret-manager"],
+    "communication": ["notification-server"]
+  },
+  "workflows": {
+    "deployment": {
+      "description": "Standard deployment workflow",
+      "steps": [
+        {
+          "server": "git-server",
+          "action": "checkout"
+        },
+        {
+          "server": "ci-cd-server",
+          "action": "build"
+        },
+        {
+          "server": "docker-server",
+          "action": "build_image"
+        },
+        {
+          "server": "kubernetes-server",
+          "action": "deploy"
+        },
+        {
+          "server": "monitoring-server",
+          "action": "verify_metrics"
+        },
+        {
+          "server": "notification-server",
+          "action": "notify_success"
+        }
+      ]
+    },
+    "incident_response": {
+      "description": "Automated incident response",
+      "steps": [
+        {
+          "server": "monitoring-server",
+          "action": "detect_anomaly"
+        },
+        {
+          "server": "logging-server",
+          "action": "collect_logs"
+        },
+        {
+          "server": "notification-server",
+          "action": "alert_oncall"
+        },
+        {
+          "server": "kubernetes-server",
+          "action": "scale_or_restart"
+        }
+      ]
+    }
+  },
+  "configuration": {
+    "timeout": 30,
+    "retry_count": 3,
+    "parallel_requests": 5,
+    "cache_ttl": 300,
+    "health_check_interval": 60,
+    "log_level": "info"
+  }
+}
