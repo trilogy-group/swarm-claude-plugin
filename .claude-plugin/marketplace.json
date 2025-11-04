@@ -1,0 +1,23 @@
+{
+  "name": "swarm-claude-plugin",
+  "version": "1.0.0",
+  "description": "Claude Plugin Development Repository with DevOps Assistant",
+  "owner": {
+    "name": "trilogy-group",
+    "email": "devops@trilogy.com"
+  },
+  "author": "DevOps Team",
+  "plugins": [
+    {
+      "name": "devops-assistant",
+      "version": "1.0.0",
+      "description": "Comprehensive DevOps automation plugin for Claude with CI/CD, monitoring, security, and compliance features",
+      "author": {
+        "name": "DevOps Team",
+        "email": "devops@trilogy.com"
+      },
+      "source": "./sample-plugin",
+      "tags": ["devops", "automation", "security", "monitoring", "ci-cd"]
+    }
+  ]
+}
