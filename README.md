@@ -27,35 +27,51 @@ swarm-claude-plugin/                # Repository root
 
 ## 🚀 Quick Installation
 
-Claude can automatically discover and install the plugin from this repository, even though it's in a subdirectory:
-
-### Method 1: Automatic Discovery (Recommended)
+### Method 1: One-Line Installation (Recommended)
 ```bash
-# Claude automatically finds the plugin in sample-plugin/
-claude plugin install https://github.com/yourusername/swarm-claude-plugin
+# Install directly using our installation script
+curl -sSL https://raw.githubusercontent.com/trilogy-group/swarm-claude-plugin/main/install.sh | bash
 ```
 
-### Method 2: Explicit Path
+### Method 2: GitHub Marketplace Format
 ```bash
-# Specify the subdirectory explicitly
-claude plugin install https://github.com/yourusername/swarm-claude-plugin#path=sample-plugin
+# Add the repository as a marketplace (for public repos)
+claude plugin marketplace add trilogy-group/swarm-claude-plugin
+
+# Install the plugin
+claude plugin install devops-assistant
 ```
 
-### Method 3: Clone and Install
+### Method 3: Clone and Install Locally
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/swarm-claude-plugin.git
+git clone https://github.com/trilogy-group/swarm-claude-plugin.git
 cd swarm-claude-plugin
 
-# Install from local path
-claude plugin install ./sample-plugin
+# Add as local marketplace
+claude plugin marketplace add .
+
+# Install the plugin
+claude plugin install devops-assistant
 ```
 
-### Method 4: One-Line Script
+### Method 4: Private Repository Installation
 ```bash
-# Use the installation script
-curl -sSL https://raw.githubusercontent.com/yourusername/swarm-claude-plugin/main/sample-plugin/install.sh | bash
+# For private repositories, use SSH
+git clone git@github.com:trilogy-group/swarm-claude-plugin.git
+cd swarm-claude-plugin
+
+# Add as local marketplace
+claude plugin marketplace add .
+
+# Install the plugin
+claude plugin install devops-assistant
 ```
+
+### ⚠️ Important Notes:
+- The plugin requires `.claude-plugin/marketplace.json` for marketplace discovery
+- Repository must be **public** for direct GitHub installation
+- For private repos, clone locally first or use SSH authentication
 
 ## 🔍 How Discovery Works
 
