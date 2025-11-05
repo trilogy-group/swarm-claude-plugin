@@ -52,6 +52,7 @@ claude -p "Show me recent deployment errors"
 | `security-reviewer` | "review security", "check vulnerabilities" | Code security analysis |
 | `performance-tester` | "test performance", "check speed" | Performance analysis |
 | `compliance-checker` | "check compliance", "verify standards" | Compliance validation |
+| `repository-initializer` | "initialize repo", "create from boilerplate" | Repository setup from templates |
 
 ### Using Agents
 ```bash
@@ -90,6 +91,15 @@ claude -p "@devops deploy --env production"
 claude -p "@devops logs --filter error --since '1 hour ago' | analyze these errors"
 ```
 
+### Repository Initialization
+```bash
+# Initialize from boilerplate
+claude -p "Initialize new service from https://github.com/your-org/boilerplate-api into payment-service repo"
+
+# With specific requirements
+claude -p "Fork boilerplate-api to create user-service with dev and stage branches"
+```
+
 ## SDK Quick Start
 
 ### Python
@@ -104,6 +114,13 @@ status = devops.command('status')
 
 # Agent
 review = devops.agent('security-reviewer').analyze('./src')
+
+# Repository initialization
+init = devops.agent('repository-initializer').create({
+    'source': 'https://github.com/org/boilerplate',
+    'target': 'new-service',
+    'branches': ['dev', 'stage']
+})
 ```
 
 ### JavaScript
@@ -120,6 +137,15 @@ const status = await claude.plugin('devops-assistant')
 const review = await claude.plugin('devops-assistant')
   .agent('security-reviewer')
   .analyze('./src');
+
+// Repository initialization
+const init = await claude.plugin('devops-assistant')
+  .agent('repository-initializer')
+  .create({
+    source: 'https://github.com/org/boilerplate',
+    target: 'new-service',
+    branches: ['dev', 'stage']
+  });
 ```
 
 ## Environment Variables

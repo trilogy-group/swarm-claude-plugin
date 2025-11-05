@@ -140,7 +140,7 @@ graph TD
 # Implementation Plan Created
 
 ## Feature: [Feature Name]
-**Path**: `.claude/specs/{feature_name}/tasks.md`
+**Path**: `docs/specs/{feature_name}/tasks.md`
 **Status**: Initial task list complete
 
 ## Task Summary

@@ -127,6 +127,20 @@ Ensures compliance with standards:
 # Agent validates against compliance frameworks
 ```
 
+#### 4. Repository Initializer
+Automates repository creation from boilerplate templates:
+
+```bash
+# Trigger repository initialization
+"Initialize new API service from our boilerplate template"
+
+# Agent will:
+# - Fork/clone boilerplate repository
+# - Apply project-specific customizations
+# - Create branch structure (dev, stage)
+# - Push initial code with configured settings
+```
+
 ### Activating Agents
 
 Agents can be activated in three ways:
@@ -452,6 +466,48 @@ def handle_slack_command(command, channel):
             agents=['security-reviewer']
         )
         slack.chat_postMessage(channel=channel, text=response)
+```
+
+### Example 5: Repository Initialization
+
+```python
+# init-repo.py
+from claude import Claude
+
+claude = Claude()
+
+def initialize_new_service(service_name, team_name):
+    # Trigger repository initialization
+    response = claude.run(
+        f"""Initialize a new repository:
+        - Use boilerplate: https://github.com/{team_name}/boilerplate-api
+        - New repo: https://github.com/{team_name}/{service_name}
+        - Create dev and stage branches
+        - Update README with {service_name} details
+        - Commit message: 'Initial {service_name} setup'
+        """,
+        agents=['repository-initializer']
+    )
+    
+    return response
+
+# Batch initialization for microservices
+services = ['user-service', 'payment-service', 'notification-service']
+for service in services:
+    result = initialize_new_service(service, 'your-org')
+    print(f"Initialized: {service} - {result.status}")
+```
+
+```bash
+# Via CLI
+claude -p "Initialize new API service from https://github.com/your-org/boilerplate-api into api-onboarding-service repository"
+
+# The repository-initializer agent will:
+# 1. Fork/clone the boilerplate
+# 2. Create the new repository
+# 3. Apply customizations (README, configs)
+# 4. Create branch structure (main, dev, stage)
+# 5. Push with "Initial onboarding" commit
 ```
 
 ## Advanced Usage
