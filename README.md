@@ -6,7 +6,9 @@ This repository demonstrates best practices for structuring and distributing Cla
 
 ```
 swarm-claude-plugin/                # Repository root
-├── .claude-repository.json         # Repository manifest for plugin discovery
+├── .claude-plugin/
+│   └── marketplace.json            # Marketplace manifest for discovery
+├── .claude-repository.json         # Repository manifest for plugin discovery  
 ├── sample-plugin/                  # Plugin in subdirectory (recommended structure)
 │   ├── .claude-plugin/
 │   │   └── plugin.json             # Plugin manifest
@@ -19,6 +21,12 @@ swarm-claude-plugin/                # Repository root
 │   ├── QUICK_START.md              # Quick start guide
 │   ├── install.sh                  # Installation script
 │   └── ...
+├── scripts/
+│   └── list-plugins.sh             # Helper script to list installed plugins
+├── install.sh                      # Main installation script
+├── USER_GUIDE.md                   # Comprehensive user guide for using the plugin
+├── QUICK_REFERENCE.md              # Quick reference card / cheat sheet
+├── REMOTE_INSTALLATION_GUIDE.md    # Guide for remote installation
 ├── GIT_DISCOVERY_GUIDE.md          # Guide for Git-based discovery
 ├── examples/                       # Usage examples (future)
 ├── docs/                           # Additional documentation (future)
@@ -73,6 +81,89 @@ claude plugin install devops-assistant
 - Repository must be **public** for direct GitHub installation
 - For private repos, clone locally first or use SSH authentication
 
+## 🎯 Quick Usage
+
+Once installed, you can use the plugin in multiple ways:
+
+### In Claude CLI Interactive Mode
+```bash
+# Start Claude CLI
+claude
+
+# Use plugin commands
+> @devops status
+> @devops logs --service api-gateway
+
+# Natural language requests
+> Check the health of our infrastructure
+> Review this code for security issues
+```
+
+### Via Command Line
+```bash
+# Direct execution
+claude -p "@devops status --format json"
+
+# Natural language
+claude -p "Analyze our deployment logs for errors"
+```
+
+### In Your Code (SDK)
+```python
+from claude import Claude, plugins
+
+claude = Claude()
+devops = plugins.load('devops-assistant')
+
+# Execute commands
+status = devops.command('status', {'environment': 'prod'})
+
+# Use agents
+security_review = devops.agent('security-reviewer').analyze('./src')
+```
+
+📚 **Full Documentation**: See [USER_GUIDE.md](USER_GUIDE.md) for comprehensive usage instructions
+
+
+### Manage Plugins
+```bash
+# Install a plugin
+claude plugin install devops-assistant
+
+# Install from specific marketplace
+claude plugin install devops-assistant@swarm-claude-plugin
+
+# Enable a plugin (use full name with marketplace)
+claude plugin enable devops-assistant@swarm-claude-plugin
+
+# Disable a plugin (use full name with marketplace)
+claude plugin disable devops-assistant@swarm-claude-plugin
+
+# Uninstall a plugin
+claude plugin uninstall devops-assistant
+
+# Validate a plugin (checks manifest structure)
+claude plugin validate /path/to/plugin
+```
+
+**Note:** The plugin name format for enable/disable commands may require the full `plugin@marketplace` format.
+
+### Manage Marketplaces
+```bash
+# Add a marketplace
+claude plugin marketplace add trilogy-group/swarm-claude-plugin  # GitHub format
+claude plugin marketplace add /path/to/local/plugin              # Local path
+
+# List marketplaces
+claude plugin marketplace list
+
+# Remove a marketplace
+claude plugin marketplace remove swarm-claude-plugin
+
+# Update marketplace
+claude plugin marketplace update swarm-claude-plugin
+```
+
 ## 🔍 How Discovery Works
 
 Claude discovers the plugin in this repository through multiple mechanisms:
@@ -102,10 +193,22 @@ A comprehensive DevOps automation plugin featuring:
 
 ## 📚 Documentation
 
+### Core Documentation
+- [**User Guide**](USER_GUIDE.md) - Complete guide on using the plugin with Claude CLI and SDK
+- [**Quick Reference**](QUICK_REFERENCE.md) - Cheat sheet for common commands and usage
 - [Plugin README](sample-plugin/README.md) - Complete plugin documentation
 - [Quick Start Guide](sample-plugin/QUICK_START.md) - Get started in 5 minutes
+
+### Installation & Setup
+- [Remote Installation Guide](REMOTE_INSTALLATION_GUIDE.md) - Install from GitHub
 - [Git Discovery Guide](GIT_DISCOVERY_GUIDE.md) - How Claude discovers plugins in Git repos
 - [Plugin Discovery Spec](sample-plugin/PLUGIN_DISCOVERY.md) - Technical discovery details
+
+### Plugin Components
+- [Commands Documentation](sample-plugin/commands/) - Available commands
+- [Agents Documentation](sample-plugin/agents/) - AI agents and their capabilities
+- [Skills Documentation](sample-plugin/skills/) - Reusable skills
+- [Hooks Documentation](sample-plugin/hooks/) - Automation hooks
 
 ## 🎯 Key Points About Subdirectory Structure
 
@@ -122,23 +225,6 @@ A comprehensive DevOps automation plugin featuring:
 - Users can specify explicit paths if needed
 - All installation methods work with subdirectory structures
 
-## 🧪 Testing the Plugin
-
-After installation, test that everything works:
-
-```bash
-# Verify installation
-claude plugin list | grep devops-assistant
-
-# Check plugin health
-claude plugin health devops-assistant
-
-# Run a test command
-claude run @devops status
-
-# View available commands
-claude help @devops
-```
 
 ## 🔄 Development Workflow
 
