@@ -141,6 +141,103 @@ Automates repository creation from boilerplate templates:
 # - Push initial code with configured settings
 ```
 
+#### 5. Spec System Prompt Loader
+Initializes and maps the correct workflow system prompts:
+
+```bash
+# Initialize spec workflow
+"Load system prompt for creating a new feature spec"
+
+# Agent will:
+# - Map to correct prompt file path
+# - Load appropriate workflow configuration
+# - Must be called first for spec processes
+```
+
+#### 6. Spec Requirements Writer
+Creates and refines requirements documents using EARS syntax:
+
+```bash
+# Create requirements document
+"Write requirements for user authentication feature"
+
+# Agent will:
+# - Generate EARS-compliant requirements
+# - Create functional and non-functional requirements
+# - Define acceptance criteria
+# - Establish requirements traceability
+```
+
+#### 7. Design Spec Writer
+Creates technical design documents from requirements:
+
+```bash
+# Generate design document
+"Create design spec for the authentication requirements"
+
+# Agent will:
+# - Analyze requirements document
+# - Define architecture patterns
+# - Create component relationships
+# - Specify data models and interfaces
+```
+
+#### 8. Spec Tasks Writer
+Generates actionable implementation task lists:
+
+```bash
+# Create task breakdown
+"Generate implementation tasks from the design document"
+
+# Agent will:
+# - Break down design into coding tasks
+# - Create ordered task list
+# - Define task dependencies
+# - Estimate implementation effort
+```
+
+#### 9. Spec Implementer
+Executes coding tasks from task lists:
+
+```bash
+# Implement specific task
+"Execute task 2.1 from the task list"
+
+# Agent will:
+# - Read requirements and design specs
+# - Implement functional code
+# - Follow architecture patterns
+# - Update task completion status
+```
+
+#### 10. Test Spec Writer
+Creates comprehensive test documentation and code:
+
+```bash
+# Generate test specifications
+"Write test cases for the authentication feature"
+
+# Agent will:
+# - Create test documentation
+# - Generate executable test code
+# - Define acceptance criteria tests
+# - Ensure 1:1 mapping between docs and tests
+```
+
+#### 11. Spec Judge
+Evaluates and combines multiple spec document versions:
+
+```bash
+# Evaluate document versions
+"Compare and select best requirements from multiple versions"
+
+# Agent will:
+# - Assess document quality
+# - Compare multiple versions
+# - Select or combine best solutions
+# - Provide improvement recommendations
+```
+
 ### Activating Agents
 
 Agents can be activated in three ways:

@@ -53,6 +53,13 @@ claude -p "Show me recent deployment errors"
 | `performance-tester` | "test performance", "check speed" | Performance analysis |
 | `compliance-checker` | "check compliance", "verify standards" | Compliance validation |
 | `repository-initializer` | "initialize repo", "create from boilerplate" | Repository setup from templates |
+| `spec-system-prompt-loader` | "load spec prompt", "initialize workflow" | Workflow prompt initialization |
+| `spec-requirements-writer` | "write requirements", "create specs" | EARS requirements generation |
+| `design-spec-writer` | "create design", "write architecture" | Technical design documentation |
+| `spec-tasks-writer` | "generate tasks", "create task list" | Implementation task breakdown |
+| `spec-implementer` | "implement task", "execute task" | Code implementation from tasks |
+| `test-spec-writer` | "write tests", "create test cases" | Test documentation and code |
+| `spec-judge` | "evaluate specs", "compare versions" | Spec document evaluation |
 
 ### Using Agents
 ```bash
@@ -100,6 +107,30 @@ claude -p "Initialize new service from https://github.com/your-org/boilerplate-a
 claude -p "Fork boilerplate-api to create user-service with dev and stage branches"
 ```
 
+### Spec-Driven Development Workflow
+```bash
+# 1. Load spec workflow
+claude -p "Load spec workflow for authentication feature"
+
+# 2. Generate requirements
+claude -p "Write requirements for user authentication with OAuth2"
+
+# 3. Create design
+claude -p "Create design spec based on the requirements"
+
+# 4. Generate tasks
+claude -p "Generate implementation tasks from the design"
+
+# 5. Implement specific task
+claude -p "Execute task 2.1 from the task list"
+
+# 6. Write tests
+claude -p "Create test cases for the authentication feature"
+
+# 7. Evaluate multiple versions
+claude -p "Compare and select best design from versions A and B"
+```
+
 ## SDK Quick Start
 
 ### Python
@@ -121,6 +152,12 @@ init = devops.agent('repository-initializer').create({
     'target': 'new-service',
     'branches': ['dev', 'stage']
 })
+
+# Spec workflow
+requirements = devops.agent('spec-requirements-writer').create('auth feature')
+design = devops.agent('design-spec-writer').generate(requirements)
+tasks = devops.agent('spec-tasks-writer').create(design)
+impl = devops.agent('spec-implementer').execute_task('2.1')
 ```
 
 ### JavaScript
@@ -146,6 +183,23 @@ const init = await claude.plugin('devops-assistant')
     target: 'new-service',
     branches: ['dev', 'stage']
   });
+
+// Spec workflow
+const requirements = await claude.plugin('devops-assistant')
+  .agent('spec-requirements-writer')
+  .create('auth feature');
+  
+const design = await claude.plugin('devops-assistant')
+  .agent('design-spec-writer')
+  .generate(requirements);
+  
+const tasks = await claude.plugin('devops-assistant')
+  .agent('spec-tasks-writer')
+  .create(design);
+  
+const impl = await claude.plugin('devops-assistant')
+  .agent('spec-implementer')
+  .executeTask('2.1');
 ```
 
 ## Environment Variables
