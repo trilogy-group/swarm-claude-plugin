@@ -1,0 +1,403 @@
+---
+alwaysApply: true
+---
+#####
+Title: MCP backend Tools Writing
+
+Applies to: All Tasks
+
+Rule:
+You will be writing the MCP tools withing a well defined project structure and test process with the below step by step process.
+
+1. Project Structure
+
+We are writing the plain python cli script inside scripts/, where each scripts define the usecases for a particular business requirement.When the scripts works totally fine , then we convert those scripts as MCP tools so that outside world can call those tools. 
+
+2. MCP Tools structure
+-For each MCP tool , we create a toolname-tool.py file inside src/tools/
+-The service for that tool is implemented inside src/service/toolname-service.py
+-The model for that tool is implemented inside src/models/toolname-model.py
+-Any utility file is written inside src/utils
+-config is written inside src/config
+-Any data Loader is written inside src/dataloader
+-Any utlity script is written inside src/utils 
+-Main server is written inside src/server.py
+-Any constant is written inside src/consts.py
+
+For every Tool, we need to add Tool support in src/server.py and inside the wrappers mcp_http_server.py, /opt/mycode/promode/promodeagro-mcp/mcp_stdio_server.py
+
+3. Test Structure of the Tools
+- After writing every tool, we write pytest for every source files of the tool, say tool file, service file , model file
+- Then we modify the test scripts inside testscripts/tool-data , update them , they are basically the metadata for all tools
+- Then for every Tool , we write curl based test scripts inside testscripts/tools-test/
+
+4. Document update for the Tools
+- For every tool update , we update the testscripts/tool-data/README_MCP_TOOLS.md and main readme README.md
+
+5. Comprehensive Test Process
+CRITICAL: Follow this exact testing sequence for every MCP tool to ensure reliability and production readiness.
+
+5.1 Pre-Implementation Validation
+- Verify the CLI script in scripts/  works completely with real DynamoDB data
+- Test all use cases manually through the CLI script
+- Confirm database operations are successful before MCP conversion
+
+5.2 Model Testing (test_toolname_model.py)
+- Test all Pydantic model creation and validation
+- Test required vs optional parameter validation
+- Test edge cases and boundary conditions
+- Test serialization/deserialization
+- Verify error handling for invalid data
+- Test cross-field validation logic
+Run: .venv/bin/python -m pytest tests/test_toolname_model.py -v
+
+5.3 Service Testing (test_toolname_service.py)
+- Mock all DynamoDB operations using unittest.mock
+- Test successful operation scenarios
+- Test error conditions (database errors, invalid data, missing records)
+- Test business logic validation
+- Test async operations and error propagation
+- Verify analytics and logging integration
+Run: .venv/bin/python -m pytest tests/test_toolname_service.py -v
+
+5.4 Tool Testing (test_toolname_tool.py)
+- Test MCP tool wrapper functionality
+- Test parameter parsing and validation
+- Test response format conversion
+- Test error handling and JSON-RPC compliance
+- Test tool registration with FastMCP
+- Mock service layer for isolated testing
+Run: .venv/bin/python -m pytest tests/test_toolname_tool.py -v
+
+5.5 Integration Testing
+- Test complete MCP stdio communication
+- Verify tool registration in server
+- Test actual tool calls through MCP protocol
+- Verify JSON-RPC request/response format
+- Test with real DynamoDB (if available) or mocked data
+Run: echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "toolname", "arguments": {...}}}' | .venv/bin/python mcp_stdio_server.py
+
+5.6 Diagnostic Testing
+- Use comprehensive diagnostic system to validate all aspects
+- Test tool schema validation and parameter analysis
+- Verify Cursor compatibility and tool visibility
+- Test multiple scenarios automatically
+Run: cd diag && ./diagnose test
+
+5.7 End-to-End Testing
+- Test via HTTP API endpoints
+- Test curl-based integration scenarios
+- Verify error handling across all layers
+- Test performance with realistic data loads
+Run: ./testscripts/tools-test/test_toolname.sh
+
+5.8 Production Readiness Validation
+- Verify all tests pass: pytest tests/ -v
+- Confirm diagnostic reports show 100% success
+- Test tool through Cursor IDE integration
+- Verify real data operations work correctly
+- Check logs for proper error handling and analytics
+
+5.9 Dependencies and Environment
+- Always use .venv virtual environment for testing
+- Add required dependencies via: uv add package_name
+- Update requirements.txt if needed
+- Test in clean environment to verify dependency completeness
+
+5.10 Error Scenarios Testing
+MANDATORY: Test these specific error scenarios for every tool:
+- Invalid parameter types and values
+- Missing required parameters
+- Database connection failures
+- Non-existent record lookups
+- Permission/access denied scenarios
+- Timeout and performance edge cases
+- JSON serialization issues (especially Decimal handling)
+
+5.11 Performance and Reliability Testing
+- Test with large data sets (if applicable)
+- Verify response times are acceptable (< 5 seconds for normal operations)
+- Test concurrent access scenarios
+- Verify memory usage is reasonable
+- Test tool behavior under load
+
+5.12 Documentation Validation
+- Ensure tool appears correctly in diagnostic output
+- Verify parameter descriptions are clear and accurate
+- Test example usage from documentation
+- Confirm tool complexity scoring is appropriate
+- Validate that Cursor will display tool correctly
+
+6. Diagnostic Tools Usage
+IMPORTANT: Use the comprehensive diagnostic system for efficient development and troubleshooting.
+
+6.1 Quick Health Checks
+- Before starting development: cd diag && ./diagnose
+- After implementing tool: cd diag && ./diagnose cursor
+- When issues arise: cd diag && ./diagnose fix
+- For cleanup: cd diag && ./diagnose clean
+
+6.2 Comprehensive Analysis
+- Full tool analysis: cd diag && ./diagnose test
+- Detailed diagnostics: cd diag && ./mcp-doctor.sh full
+- Performance testing: cd diag && ./mcp-doctor.sh test
+
+6.3 Troubleshooting Workflow
+When MCP tools behave unpredictably:
+1. Run: cd diag && ./diagnose clean (kill stuck processes)
+2. Run: cd diag && ./diagnose fix (auto-fix common issues)
+3. Restart Cursor IDE or disable/enable MCP server
+4. Verify: cd diag && ./diagnose cursor (check tool visibility)
+5. Test: cd diag && ./diagnose test (comprehensive validation)
+
+6.4 Report Analysis
+- All diagnostic reports saved to logs/ folder
+- Reports include tool schema analysis, test results, and recommendations
+- Use reports to identify specific tool issues and performance problems
+- Reports show exactly what Cursor will see and any compatibility issues
+
+7. Best Practices for MCP Tool Development
+7.1 Always follow this exact sequence: CLI Script → Model → Service → Tool → Tests → Documentation
+7.2 Use virtual environment (.venv) for all development and testing
+7.3 Test with real AuroraSparkTheme DynamoDB tables when possible
+7.4 Handle Decimal serialization properly (add _convert_decimal methods)
+7.5 Use comprehensive error handling with proper logging
+7.6 Validate tools work in both direct calls and Cursor integration
+7.7 Keep diagnostic reports for troubleshooting patterns and improvements
+
+8. Python Environment Management
+CRITICAL: Follow these exact environment and dependency management practices.
+
+8.1 Virtual Environment Setup
+- ALWAYS use uv for virtual environment management
+- Virtual environment location: .venv (project root)
+- Never use system Python for development or testing
+- All development must happen within .venv context
+
+Setup Commands:
+```bash
+# Create virtual environment (if not exists)
+uv venv
+
+# Activate virtual environment  
+source .venv/bin/activate
+
+# Verify correct Python
+which python  # Should show: /opt/mycode/promode/promodeagro-mcp/.venv/bin/python
+```
+
+8.2 Dependency Management
+- ALWAYS use 'uv add' for adding new dependencies
+- NEVER use pip install directly
+- Every dependency must have proper entry in requirements.txt
+- Dependencies are automatically managed by uv
+
+Adding Dependencies:
+```bash
+# Add new dependency (automatically updates requirements.txt)
+uv add package_name
+
+# Add development dependency
+uv add --dev package_name
+
+# Add specific version
+uv add package_name==1.2.3
+
+# Add from requirements
+uv sync
+```
+
+8.3 Testing Environment
+- All pytest commands must use .venv/bin/python
+- All MCP server testing must use .venv/bin/python
+- Diagnostic scripts automatically detect and use .venv
+
+Testing Commands:
+```bash
+# Model testing
+.venv/bin/python -m pytest tests/test_toolname_model.py -v
+
+# Service testing  
+.venv/bin/python -m pytest tests/test_toolname_service.py -v
+
+# Tool testing
+.venv/bin/python -m pytest tests/test_toolname_tool.py -v
+
+# All tests
+.venv/bin/python -m pytest tests/ -v
+
+# MCP server testing
+echo '{"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}' | .venv/bin/python mcp_stdio_server.py
+```
+
+8.4 Development Workflow
+- Start every session by verifying virtual environment
+- Use diagnostic tools that automatically handle .venv
+- Never mix system Python with project dependencies
+- Keep requirements.txt synchronized with uv.lock
+
+Verification Commands:
+```bash
+# Quick environment check
+cd diag && ./diagnose           # Auto-detects .venv
+
+# Verify dependencies
+uv pip list                     # Show installed packages
+
+# Check environment
+python --version                # Should be from .venv
+which python                    # Should show .venv path
+```
+
+8.5 Dependency Troubleshooting
+- If import errors occur, verify .venv activation
+- Use 'uv sync' to synchronize dependencies
+- Check uv.lock for version conflicts
+- Use diagnostic tools for environment validation
+
+Common Issues and Solutions:
+```bash
+# Module not found error
+uv add missing_package_name
+
+# Environment not activated
+source .venv/bin/activate
+
+# Dependencies out of sync
+uv sync
+
+# Clean environment
+rm -rf .venv && uv venv && uv sync
+```
+
+8.6 Production Deployment
+- requirements.txt must be complete and accurate
+- Use uv.lock for exact version pinning
+- Test deployment with clean virtual environment
+- Verify all dependencies are properly declared
+
+Deployment Verification:
+```bash
+# Test clean environment
+rm -rf .venv
+uv venv
+uv sync
+.venv/bin/python -m pytest tests/ -v
+cd diag && ./diagnose test
+```
+
+9. Backend MCP Server Response Format Standard
+CRITICAL: All MCP tools must follow these exact integration standards for consistency and frontend compatibility.
+
+9.1 MCP API Response Structure
+All MCP server endpoints MUST return responses in this exact format:
+
+```typescript
+{
+  "result": {
+    "status": "success" | "error",
+    "message": string,
+    "operation": string,
+    "data": any,
+    "metadata": {
+      "total_count": number,
+      "page": number,
+      "page_size": number,
+      "timestamp": ISO8601_string
+    }
+  },
+  "timestamp": ISO8601_string
+}
+```
+
+Success Response Example:
+```json
+{
+  "result": {
+    "status": "success",
+    "message": "Found 51 journeys",
+    "operation": "list_journeys",
+    "data": [...],
+    "metadata": {
+      "total_count": 51
+    }
+  },
+  "timestamp": "2025-10-11T16:45:06Z"
+}
+```
+
+Error Response Example:
+```json
+{
+  "result": {
+    "status": "error",
+    "message": "Journey not found",
+    "operation": "read_journey",
+    "error_code": "NOT_FOUND",
+    "error_details": {}
+  },
+  "timestamp": "2025-10-11T16:45:06Z"
+}
+```
+
+9.2 Backend Field Naming Convention
+MANDATORY: Use camelCase for all field names in API responses for frontend compatibility.
+
+Field Naming Rules:
+- Use **camelCase** for all field names in API responses
+- Journey ID field MUST be: `journeyId` (not `journey_id` or `JourneyId`)
+- Status field MUST be: `status` (lowercase)
+- Created/Updated timestamps MUST be: `createdAt`, `updatedAt` (ISO 8601 format)
+- Current stage MUST be: `currentStageId`
+
+Example Journey Object:
+```typescript
+{
+  "journeyId": "JRN-ABC123",
+  "name": "Journey Name",
+  "status": "pending" | "running" | "completed" | "failed" | "paused" | "cancelled",
+  "priority": "low" | "medium" | "high" | "critical",
+  "odaComponentType": string,
+  "overallProgress": number,  // 0-100
+  "currentStageId": string,
+  "createdAt": "2025-10-11T10:34:21.333919Z",
+  "updatedAt": "2025-10-11T10:34:21.333919Z",
+  "createdBy": string,
+  "description": string
+}
+```
+
+9.3 Backend CORS Configuration
+CRITICAL: All backend servers MUST configure CORS to allow frontend origins.
+
+CORS Middleware Setup:
+```python
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8080",
+        "http://10.0.0.3:8080",
+        # Add production origins
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+    max_age=3600,
+)
+```
+
+IMPORTANT NOTES:
+- CORS middleware MUST be added BEFORE any other middleware or routes
+- Test CORS configuration with actual frontend requests
+- Verify OPTIONS preflight requests are handled correctly
+- Add all development and production frontend origins to allow_origins list
+
+9.4 Response Format Implementation Guidelines
+When implementing MCP tools, ensure:
+- All tool responses are wrapped in the standard result format
+- Use proper ISO 8601 timestamps (with timezone)
+- Include operation name in every response for debugging
+- Provide meaningful error messages with error_code for frontend handling
+- Include metadata for list operations (total_count, pagination info)
+- Handle serialization of complex types (Decimal, datetime) properly
+- Test response format with actual frontend integration
