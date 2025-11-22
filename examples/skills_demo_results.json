@@ -1,0 +1,939 @@
+{
+  "code_review_workflow": {
+    "files_reviewed": 3,
+    "results": [
+      {
+        "status": "success",
+        "file": "src/api/auth_handler.py",
+        "language": "python",
+        "timestamp": "2025-11-22T12:26:26.722872",
+        "summary": {
+          "total": 7,
+          "by_severity": {
+            "error": 1,
+            "info": 3,
+            "high": 1,
+            "medium": 1,
+            "warning": 1
+          },
+          "by_type": {
+            "syntax": 1,
+            "style": 2,
+            "security": 2,
+            "performance": 2
+          }
+        },
+        "findings": [
+          {
+            "type": "syntax",
+            "severity": "error",
+            "line": 45,
+            "column": 12,
+            "message": "Missing colon after if statement",
+            "rule": "E901"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 12,
+            "message": "Line too long (exceeds 100 characters)",
+            "rule": "max-line-length"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 34,
+            "message": "Inconsistent indentation",
+            "rule": "indent"
+          },
+          {
+            "type": "security",
+            "severity": "high",
+            "line": 78,
+            "message": "Potential SQL injection vulnerability",
+            "cwe": "CWE-89",
+            "owasp": "A03:2021"
+          },
+          {
+            "type": "security",
+            "severity": "medium",
+            "line": 102,
+            "message": "Hardcoded credential detected",
+            "cwe": "CWE-798",
+            "owasp": "A07:2021"
+          },
+          {
+            "type": "performance",
+            "severity": "warning",
+            "line": 156,
+            "message": "Inefficient loop - consider using list comprehension",
+            "impact": "medium"
+          },
+          {
+            "type": "performance",
+            "severity": "info",
+            "line": 234,
+            "message": "Multiple database calls in loop - consider batch operation",
+            "impact": "high"
+          }
+        ],
+        "metrics": {
+          "complexity": {
+            "cyclomatic": 12,
+            "cognitive": 8,
+            "halstead": {
+              "difficulty": 15.3,
+              "volume": 245.6,
+              "effort": 3759.68
+            },
+            "maintainability_index": 72,
+            "functions": {
+              "total": 15,
+              "complex": 3,
+              "very_complex": 1
+            }
+          }
+        },
+        "suggestions": [
+          "Add docstrings to all public functions",
+          "Consider using type hints for better code clarity",
+          "Implement error handling for external API calls",
+          "Add unit tests for critical functions",
+          "Consider extracting complex logic into separate functions",
+          "Use context managers for file operations",
+          "Consider using dataclasses for data structures"
+        ],
+        "score": 72
+      },
+      {
+        "status": "success",
+        "file": "src/frontend/components/Dashboard.tsx",
+        "language": "typescript",
+        "timestamp": "2025-11-22T12:26:28.525388",
+        "summary": {
+          "total": 4,
+          "by_severity": {
+            "info": 3,
+            "warning": 1
+          },
+          "by_type": {
+            "style": 2,
+            "performance": 2
+          }
+        },
+        "findings": [
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 12,
+            "message": "Line too long (exceeds 100 characters)",
+            "rule": "max-line-length"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 34,
+            "message": "Inconsistent indentation",
+            "rule": "indent"
+          },
+          {
+            "type": "performance",
+            "severity": "warning",
+            "line": 156,
+            "message": "Inefficient loop - consider using list comprehension",
+            "impact": "medium"
+          },
+          {
+            "type": "performance",
+            "severity": "info",
+            "line": 234,
+            "message": "Multiple database calls in loop - consider batch operation",
+            "impact": "high"
+          }
+        ],
+        "metrics": {
+          "complexity": {
+            "cyclomatic": 12,
+            "cognitive": 8,
+            "halstead": {
+              "difficulty": 15.3,
+              "volume": 245.6,
+              "effort": 3759.68
+            },
+            "maintainability_index": 72,
+            "functions": {
+              "total": 15,
+              "complex": 3,
+              "very_complex": 1
+            }
+          }
+        },
+        "suggestions": [
+          "Add docstrings to all public functions",
+          "Consider using type hints for better code clarity",
+          "Implement error handling for external API calls",
+          "Add unit tests for critical functions",
+          "Consider extracting complex logic into separate functions",
+          "Use async/await instead of callbacks",
+          "Consider using const for immutable values"
+        ],
+        "score": 89
+      },
+      {
+        "status": "success",
+        "file": "src/services/database.js",
+        "language": "javascript",
+        "timestamp": "2025-11-22T12:26:30.328145",
+        "summary": {
+          "total": 7,
+          "by_severity": {
+            "warning": 2,
+            "info": 3,
+            "high": 1,
+            "medium": 1
+          },
+          "by_type": {
+            "syntax": 1,
+            "style": 2,
+            "security": 2,
+            "performance": 2
+          }
+        },
+        "findings": [
+          {
+            "type": "syntax",
+            "severity": "warning",
+            "line": 23,
+            "column": 8,
+            "message": "Missing semicolon",
+            "rule": "semi"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 12,
+            "message": "Line too long (exceeds 100 characters)",
+            "rule": "max-line-length"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 34,
+            "message": "Inconsistent indentation",
+            "rule": "indent"
+          },
+          {
+            "type": "security",
+            "severity": "high",
+            "line": 78,
+            "message": "Potential SQL injection vulnerability",
+            "cwe": "CWE-89",
+            "owasp": "A03:2021"
+          },
+          {
+            "type": "security",
+            "severity": "medium",
+            "line": 102,
+            "message": "Hardcoded credential detected",
+            "cwe": "CWE-798",
+            "owasp": "A07:2021"
+          },
+          {
+            "type": "performance",
+            "severity": "warning",
+            "line": 156,
+            "message": "Inefficient loop - consider using list comprehension",
+            "impact": "medium"
+          },
+          {
+            "type": "performance",
+            "severity": "info",
+            "line": 234,
+            "message": "Multiple database calls in loop - consider batch operation",
+            "impact": "high"
+          }
+        ],
+        "metrics": {
+          "complexity": {
+            "cyclomatic": 12,
+            "cognitive": 8,
+            "halstead": {
+              "difficulty": 15.3,
+              "volume": 245.6,
+              "effort": 3759.68
+            },
+            "maintainability_index": 72,
+            "functions": {
+              "total": 15,
+              "complex": 3,
+              "very_complex": 1
+            }
+          }
+        },
+        "suggestions": [
+          "Add docstrings to all public functions",
+          "Consider using type hints for better code clarity",
+          "Implement error handling for external API calls",
+          "Add unit tests for critical functions",
+          "Consider extracting complex logic into separate functions",
+          "Use async/await instead of callbacks",
+          "Consider using const for immutable values"
+        ],
+        "score": 79
+      }
+    ],
+    "total_issues": 18,
+    "average_score": 80.0,
+    "critical_issues": [
+      {
+        "file": "src/api/auth_handler.py",
+        "issue": {
+          "type": "syntax",
+          "severity": "error",
+          "line": 45,
+          "column": 12,
+          "message": "Missing colon after if statement",
+          "rule": "E901"
+        }
+      },
+      {
+        "file": "src/api/auth_handler.py",
+        "issue": {
+          "type": "security",
+          "severity": "high",
+          "line": 78,
+          "message": "Potential SQL injection vulnerability",
+          "cwe": "CWE-89",
+          "owasp": "A03:2021"
+        }
+      },
+      {
+        "file": "src/services/database.js",
+        "issue": {
+          "type": "security",
+          "severity": "high",
+          "line": 78,
+          "message": "Potential SQL injection vulnerability",
+          "cwe": "CWE-89",
+          "owasp": "A03:2021"
+        }
+      }
+    ]
+  },
+  "pdf_processing_workflow": {
+    "documents_processed": 3,
+    "total_pages": 135,
+    "results": [
+      {
+        "status": "success",
+        "document": "docs/deployment_guide.pdf",
+        "timestamp": "2025-11-22T12:26:32.131240",
+        "operations_performed": [
+          "extract_text",
+          "extract_metadata",
+          "summarize",
+          "extract_tables"
+        ],
+        "extracted_text": {
+          "full_text": "\n        This is extracted text from Deployment Guide v2.0.\n        \n        The document contains important information about DevOps practices,\n        including CI/CD pipelines, monitoring strategies, and deployment procedures.\n        \n        Key sections include:\n        1. Introduction to DevOps\n        2. Setting up CI/CD pipelines\n        3. Monitoring and alerting\n        4. Security best practices\n        5. Troubleshooting guide\n        \n        Total words extracted: 11250\n        ",
+          "word_count": 11250,
+          "character_count": 498,
+          "pages_processed": 45
+        },
+        "metadata": {
+          "title": "Deployment Guide v2.0",
+          "author": "DevOps Team",
+          "subject": "DevOps Documentation",
+          "keywords": [
+            "DevOps",
+            "CI/CD",
+            "Automation",
+            "Monitoring"
+          ],
+          "creator": "Claude DevOps Plugin",
+          "producer": "PDF Processor Skill v1.0",
+          "creation_date": "2024-11-15T10:30:00Z",
+          "modification_date": "2024-11-20T14:45:00Z",
+          "pages": 45,
+          "file_size": "1250KB",
+          "pdf_version": "1.7",
+          "encrypted": false
+        },
+        "summary": {
+          "executive_summary": "Deployment Guide v2.0 provides comprehensive guidance on DevOps practices and procedures.\n            The document covers essential topics including continuous integration/deployment,\n            infrastructure as code, monitoring solutions, and security considerations.",
+          "key_points": [
+            "Automated CI/CD pipeline setup and configuration",
+            "Container orchestration with Kubernetes",
+            "Monitoring stack implementation (Prometheus, Grafana)",
+            "Security scanning and compliance automation",
+            "Incident response and troubleshooting procedures"
+          ],
+          "recommendations": [
+            "Implement automated testing at all stages",
+            "Use infrastructure as code for all deployments",
+            "Establish comprehensive monitoring coverage",
+            "Regular security audits and updates"
+          ],
+          "summary_length": "short",
+          "confidence": 0.92
+        },
+        "tables": [
+          {
+            "table_id": 1,
+            "page": 5,
+            "title": "Deployment Environments",
+            "headers": [
+              "Environment",
+              "Purpose",
+              "Access Level",
+              "Approval Required"
+            ],
+            "rows": [
+              [
+                "Development",
+                "Developer testing",
+                "All developers",
+                "No"
+              ],
+              [
+                "Staging",
+                "QA testing",
+                "QA team",
+                "QA Lead"
+              ],
+              [
+                "Production",
+                "Live system",
+                "Ops team only",
+                "CTO"
+              ]
+            ]
+          },
+          {
+            "table_id": 2,
+            "page": 12,
+            "title": "Monitoring Metrics",
+            "headers": [
+              "Metric",
+              "Threshold",
+              "Alert Level",
+              "Action"
+            ],
+            "rows": [
+              [
+                "CPU Usage",
+                ">80%",
+                "Warning",
+                "Scale up"
+              ],
+              [
+                "Memory Usage",
+                ">90%",
+                "Critical",
+                "Immediate intervention"
+              ],
+              [
+                "Error Rate",
+                ">1%",
+                "Warning",
+                "Investigation required"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "status": "success",
+        "document": "docs/security_policies.pdf",
+        "timestamp": "2025-11-22T12:26:33.333081",
+        "operations_performed": [
+          "extract_text",
+          "summarize",
+          "extract_tables"
+        ],
+        "extracted_text": {
+          "full_text": "\n        This is extracted text from Security Policies and Procedures.\n        \n        The document contains important information about DevOps practices,\n        including CI/CD pipelines, monitoring strategies, and deployment procedures.\n        \n        Key sections include:\n        1. Introduction to DevOps\n        2. Setting up CI/CD pipelines\n        3. Monitoring and alerting\n        4. Security best practices\n        5. Troubleshooting guide\n        \n        Total words extracted: 19500\n        ",
+          "word_count": 19500,
+          "character_count": 509,
+          "pages_processed": 78
+        },
+        "summary": {
+          "executive_summary": "Security Policies and Procedures provides comprehensive guidance on DevOps practices and procedures.\n            The document covers essential topics including continuous integration/deployment,\n            infrastructure as code, monitoring solutions, and security considerations.",
+          "key_points": [
+            "Automated CI/CD pipeline setup and configuration",
+            "Container orchestration with Kubernetes",
+            "Monitoring stack implementation (Prometheus, Grafana)",
+            "Security scanning and compliance automation",
+            "Incident response and troubleshooting procedures"
+          ],
+          "recommendations": [
+            "Implement automated testing at all stages",
+            "Use infrastructure as code for all deployments",
+            "Establish comprehensive monitoring coverage",
+            "Regular security audits and updates"
+          ],
+          "summary_length": "short",
+          "confidence": 0.92
+        },
+        "tables": [
+          {
+            "table_id": 1,
+            "page": 5,
+            "title": "Deployment Environments",
+            "headers": [
+              "Environment",
+              "Purpose",
+              "Access Level",
+              "Approval Required"
+            ],
+            "rows": [
+              [
+                "Development",
+                "Developer testing",
+                "All developers",
+                "No"
+              ],
+              [
+                "Staging",
+                "QA testing",
+                "QA team",
+                "QA Lead"
+              ],
+              [
+                "Production",
+                "Live system",
+                "Ops team only",
+                "CTO"
+              ]
+            ]
+          },
+          {
+            "table_id": 2,
+            "page": 12,
+            "title": "Monitoring Metrics",
+            "headers": [
+              "Metric",
+              "Threshold",
+              "Alert Level",
+              "Action"
+            ],
+            "rows": [
+              [
+                "CPU Usage",
+                ">80%",
+                "Warning",
+                "Scale up"
+              ],
+              [
+                "Memory Usage",
+                ">90%",
+                "Critical",
+                "Immediate intervention"
+              ],
+              [
+                "Error Rate",
+                ">1%",
+                "Warning",
+                "Investigation required"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "status": "success",
+        "document": "reports/monthly_metrics.pdf",
+        "timestamp": "2025-11-22T12:26:34.234485",
+        "operations_performed": [
+          "extract_metadata",
+          "summarize",
+          "extract_tables",
+          "extract_images"
+        ],
+        "metadata": {
+          "title": "Monthly Performance Metrics",
+          "author": "DevOps Team",
+          "subject": "DevOps Documentation",
+          "keywords": [
+            "DevOps",
+            "CI/CD",
+            "Automation",
+            "Monitoring"
+          ],
+          "creator": "Claude DevOps Plugin",
+          "producer": "PDF Processor Skill v1.0",
+          "creation_date": "2024-11-15T10:30:00Z",
+          "modification_date": "2024-11-20T14:45:00Z",
+          "pages": 12,
+          "file_size": "456KB",
+          "pdf_version": "1.7",
+          "encrypted": false
+        },
+        "summary": {
+          "executive_summary": "Monthly Performance Metrics provides comprehensive guidance on DevOps practices and procedures.\n            The document covers essential topics including continuous integration/deployment,\n            infrastructure as code, monitoring solutions, and security considerations.",
+          "key_points": [
+            "Automated CI/CD pipeline setup and configuration",
+            "Container orchestration with Kubernetes",
+            "Monitoring stack implementation (Prometheus, Grafana)",
+            "Security scanning and compliance automation",
+            "Incident response and troubleshooting procedures"
+          ],
+          "recommendations": [
+            "Implement automated testing at all stages",
+            "Use infrastructure as code for all deployments",
+            "Establish comprehensive monitoring coverage",
+            "Regular security audits and updates"
+          ],
+          "summary_length": "short",
+          "confidence": 0.92
+        },
+        "tables": [
+          {
+            "table_id": 1,
+            "page": 5,
+            "title": "Deployment Environments",
+            "headers": [
+              "Environment",
+              "Purpose",
+              "Access Level",
+              "Approval Required"
+            ],
+            "rows": [
+              [
+                "Development",
+                "Developer testing",
+                "All developers",
+                "No"
+              ],
+              [
+                "Staging",
+                "QA testing",
+                "QA team",
+                "QA Lead"
+              ],
+              [
+                "Production",
+                "Live system",
+                "Ops team only",
+                "CTO"
+              ]
+            ]
+          },
+          {
+            "table_id": 2,
+            "page": 12,
+            "title": "Monitoring Metrics",
+            "headers": [
+              "Metric",
+              "Threshold",
+              "Alert Level",
+              "Action"
+            ],
+            "rows": [
+              [
+                "CPU Usage",
+                ">80%",
+                "Warning",
+                "Scale up"
+              ],
+              [
+                "Memory Usage",
+                ">90%",
+                "Critical",
+                "Immediate intervention"
+              ],
+              [
+                "Error Rate",
+                ">1%",
+                "Warning",
+                "Investigation required"
+              ]
+            ]
+          }
+        ],
+        "images": [
+          {
+            "image_id": 1,
+            "page": 3,
+            "type": "diagram",
+            "description": "CI/CD Pipeline Architecture",
+            "format": "PNG",
+            "dimensions": "800x600",
+            "file_path": "/tmp/extracted_images/pipeline_diagram.png"
+          },
+          {
+            "image_id": 2,
+            "page": 8,
+            "type": "chart",
+            "description": "Performance Metrics Dashboard",
+            "format": "JPEG",
+            "dimensions": "1200x800",
+            "file_path": "/tmp/extracted_images/metrics_dashboard.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  "combined_workflow": {
+    "documentation": "API Documentation",
+    "code_samples_reviewed": 2,
+    "review_results": [
+      {
+        "status": "success",
+        "file": "docs/samples/auth_example.py",
+        "language": "python",
+        "timestamp": "2025-11-22T12:26:36.037370",
+        "summary": {
+          "total": 7,
+          "by_severity": {
+            "error": 1,
+            "info": 3,
+            "high": 1,
+            "medium": 1,
+            "warning": 1
+          },
+          "by_type": {
+            "syntax": 1,
+            "style": 2,
+            "security": 2,
+            "performance": 2
+          }
+        },
+        "findings": [
+          {
+            "type": "syntax",
+            "severity": "error",
+            "line": 45,
+            "column": 12,
+            "message": "Missing colon after if statement",
+            "rule": "E901"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 12,
+            "message": "Line too long (exceeds 100 characters)",
+            "rule": "max-line-length"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 34,
+            "message": "Inconsistent indentation",
+            "rule": "indent"
+          },
+          {
+            "type": "security",
+            "severity": "high",
+            "line": 78,
+            "message": "Potential SQL injection vulnerability",
+            "cwe": "CWE-89",
+            "owasp": "A03:2021"
+          },
+          {
+            "type": "security",
+            "severity": "medium",
+            "line": 102,
+            "message": "Hardcoded credential detected",
+            "cwe": "CWE-798",
+            "owasp": "A07:2021"
+          },
+          {
+            "type": "performance",
+            "severity": "warning",
+            "line": 156,
+            "message": "Inefficient loop - consider using list comprehension",
+            "impact": "medium"
+          },
+          {
+            "type": "performance",
+            "severity": "info",
+            "line": 234,
+            "message": "Multiple database calls in loop - consider batch operation",
+            "impact": "high"
+          }
+        ],
+        "metrics": {
+          "complexity": {
+            "cyclomatic": 12,
+            "cognitive": 8,
+            "halstead": {
+              "difficulty": 15.3,
+              "volume": 245.6,
+              "effort": 3759.68
+            },
+            "maintainability_index": 72,
+            "functions": {
+              "total": 15,
+              "complex": 3,
+              "very_complex": 1
+            }
+          }
+        },
+        "suggestions": [
+          "Add docstrings to all public functions",
+          "Consider using type hints for better code clarity",
+          "Implement error handling for external API calls",
+          "Add unit tests for critical functions",
+          "Consider extracting complex logic into separate functions",
+          "Use context managers for file operations",
+          "Consider using dataclasses for data structures"
+        ],
+        "score": 72
+      },
+      {
+        "status": "success",
+        "file": "docs/samples/api_client.js",
+        "language": "javascript",
+        "timestamp": "2025-11-22T12:26:37.839975",
+        "summary": {
+          "total": 7,
+          "by_severity": {
+            "warning": 2,
+            "info": 3,
+            "high": 1,
+            "medium": 1
+          },
+          "by_type": {
+            "syntax": 1,
+            "style": 2,
+            "security": 2,
+            "performance": 2
+          }
+        },
+        "findings": [
+          {
+            "type": "syntax",
+            "severity": "warning",
+            "line": 23,
+            "column": 8,
+            "message": "Missing semicolon",
+            "rule": "semi"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 12,
+            "message": "Line too long (exceeds 100 characters)",
+            "rule": "max-line-length"
+          },
+          {
+            "type": "style",
+            "severity": "info",
+            "line": 34,
+            "message": "Inconsistent indentation",
+            "rule": "indent"
+          },
+          {
+            "type": "security",
+            "severity": "high",
+            "line": 78,
+            "message": "Potential SQL injection vulnerability",
+            "cwe": "CWE-89",
+            "owasp": "A03:2021"
+          },
+          {
+            "type": "security",
+            "severity": "medium",
+            "line": 102,
+            "message": "Hardcoded credential detected",
+            "cwe": "CWE-798",
+            "owasp": "A07:2021"
+          },
+          {
+            "type": "performance",
+            "severity": "warning",
+            "line": 156,
+            "message": "Inefficient loop - consider using list comprehension",
+            "impact": "medium"
+          },
+          {
+            "type": "performance",
+            "severity": "info",
+            "line": 234,
+            "message": "Multiple database calls in loop - consider batch operation",
+            "impact": "high"
+          }
+        ],
+        "metrics": {
+          "complexity": {
+            "cyclomatic": 12,
+            "cognitive": 8,
+            "halstead": {
+              "difficulty": 15.3,
+              "volume": 245.6,
+              "effort": 3759.68
+            },
+            "maintainability_index": 72,
+            "functions": {
+              "total": 15,
+              "complex": 3,
+              "very_complex": 1
+            }
+          }
+        },
+        "suggestions": [
+          "Add docstrings to all public functions",
+          "Consider using type hints for better code clarity",
+          "Implement error handling for external API calls",
+          "Add unit tests for critical functions",
+          "Consider extracting complex logic into separate functions",
+          "Use async/await instead of callbacks",
+          "Consider using const for immutable values"
+        ],
+        "score": 79
+      }
+    ],
+    "recommendations": []
+  },
+  "automated_report": {
+    "title": "Weekly DevOps Report",
+    "generated_at": "2025-11-22T12:26:46.752458",
+    "sections": {
+      "code_quality": {
+        "files_reviewed": 3,
+        "average_score": 80.0,
+        "total_issues": 18,
+        "details": [
+          {
+            "file": "src/main.py",
+            "score": 72,
+            "issues": 7
+          },
+          {
+            "file": "src/api.js",
+            "score": 79,
+            "issues": 7
+          },
+          {
+            "file": "src/database.go",
+            "score": 89,
+            "issues": 4
+          }
+        ]
+      },
+      "documentation": {
+        "documents_reviewed": 2,
+        "total_pages": 65,
+        "details": [
+          {
+            "document": "User Guide",
+            "pages": 25,
+            "last_modified": "2024-11-20T14:45:00Z"
+          },
+          {
+            "document": "API Reference",
+            "pages": 40,
+            "last_modified": "2024-11-20T14:45:00Z"
+          }
+        ]
+      },
+      "recommendations": [
+        "Address high-priority security issues in code",
+        "Update API documentation with latest changes",
+        "Improve code coverage in critical modules",
+        "Schedule documentation review meeting"
+      ]
+    }
+  }
+}

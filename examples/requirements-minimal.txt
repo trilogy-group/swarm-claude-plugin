@@ -1,0 +1,6 @@
+# Minimal Requirements for Claude DevOps Plugin Examples
+# Install with: pip install -r requirements-minimal.txt
+
+# Essential dependencies only
+anthropic>=0.18.0          # Claude API client
+python-dotenv>=1.0.0       # Environment variable management
